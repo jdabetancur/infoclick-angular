@@ -1,0 +1,42 @@
+<section class="page-banner">
+  <div class="container">
+    <h1>Todas las noticias</h1>
+    <p>Explora la cobertura completa organizada por categoría.</p>
+  </div>
+</section>
+
+<section id="listado" class="container">
+  <div class="toolbar">
+    <div class="chips" role="group" aria-label="Filtrar por categoría">
+      <button type="button" class="chip" *ngFor="let chip of chips"
+              [class.is-active]="chip.key === category"
+              [attr.aria-pressed]="chip.key === category"
+              (click)="selectCategory(chip.key)">{{ chip.name }}</button>
+    </div>
+    <label class="visually-hidden" for="search">Buscar noticias</label>
+    <!-- [(ngModel)]: two-way binding entre el input y la propiedad search -->
+    <input id="search" class="search-input" type="search" placeholder="Buscar por título o tema…"
+           [(ngModel)]="search" (ngModelChange)="onSearch()">
+  </div>
+
+  <p class="results-info" aria-live="polite">{{ loading ? 'Cargando noticias…' : rangeText }}</p>
+
+  <div class="alert-error" *ngIf="error"><strong>No se pudieron cargar las noticias.</strong></div>
+
+  <div class="cards-grid">
+    <app-news-card *ngFor="let news of pageItems; trackBy: trackById" [news]="news"></app-news-card>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && !error && filtered.length === 0">
+    <h3>No hay resultados</h3>
+    <p>Prueba con otra categoría o con otras palabras.</p>
+  </div>
+
+  <nav class="pagination" aria-label="Paginación" *ngIf="totalPages > 1">
+    <button type="button" class="page-btn" [disabled]="page === 1" (click)="goToPage(page - 1)" aria-label="Página anterior">‹</button>
+    <button type="button" class="page-btn" *ngFor="let p of pages"
+            [class.is-active]="p === page" [attr.aria-current]="p === page ? 'page' : null"
+            (click)="goToPage(p)">{{ p }}</button>
+    <button type="button" class="page-btn" [disabled]="page === totalPages" (click)="goToPage(page + 1)" aria-label="Página siguiente">›</button>
+  </nav>
+</section>

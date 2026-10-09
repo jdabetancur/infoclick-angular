@@ -1,0 +1,194 @@
+/* ==========================================================================
+   InfoClick — Estilos globales
+   Proyecto académico: Desarrollo de Front-end (Politécnico Grancolombiano)
+
+   En Angular cada componente tiene su propia hoja (.component.css) y esos
+   estilos quedan "encapsulados": solo afectan a su plantilla. Aquí quedan
+   únicamente los elementos compartidos por varias páginas:
+   1. Variables (tokens de diseño definidos en la maquetación de Figma)
+   2. Estilos base
+   3. Botones, insignias y secciones
+   4. Retícula de tarjetas, estados vacíos y alertas
+   5. Formularios y validación
+   6. Diseño adaptable
+   ========================================================================== */
+
+/* 1. Variables ------------------------------------------------------------ */
+:root {
+  --color-navy: #111a3e;
+  --color-primary: #1f3a8f;
+  --color-primary-dark: #172c6e;
+  --color-accent: #dc2626;
+  --color-accent-soft: #fdecec;
+  --color-text: #374151;
+  --color-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --color-surface: #f3f4f6;
+  --color-white: #ffffff;
+  --color-success: #15803d;
+  --color-success-soft: #e8f6ee;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-pill: 999px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  --container: 1184px;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --shadow-sm: 0 1px 3px rgba(17, 26, 62, .08);
+  --shadow-md: 0 8px 24px rgba(17, 26, 62, .10);
+}
+
+/* 2. Base ----------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-white);
+}
+/* app-root ocupa toda la altura para que el footer quede abajo */
+app-root { display: flex; flex-direction: column; min-height: 100vh; }
+main { flex: 1; }
+
+h1, h2, h3, h4 { color: var(--color-navy); line-height: 1.2; margin: 0 0 var(--space-3); }
+h1 { font-size: clamp(2rem, 4vw, 2.75rem); font-weight: 800; letter-spacing: -.02em; }
+h2 { font-size: 1.5rem; font-weight: 700; }
+h3 { font-size: 1.125rem; font-weight: 700; }
+p  { margin: 0 0 var(--space-4); }
+a { color: var(--color-primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+img { max-width: 100%; display: block; }
+:focus-visible { outline: 3px solid #93c5fd; outline-offset: 2px; }
+
+.container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 var(--space-5); }
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.skip-link { position: absolute; left: -999px; top: 8px; z-index: 200; background: var(--color-navy); color: #fff; padding: 8px 12px; border-radius: 6px; }
+.skip-link:focus { left: 8px; }
+
+.logo { font-size: 1.4rem; font-weight: 800; color: var(--color-navy); letter-spacing: -.02em; }
+.logo:hover { text-decoration: none; }
+.logo span { color: var(--color-accent); }
+
+/* 3. Botones, insignias y secciones -------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  font: 600 .95rem var(--font);
+  cursor: pointer;
+  transition: background-color .2s, color .2s, border-color .2s;
+}
+.btn:hover { text-decoration: none; }
+.btn-primary { background: var(--color-primary); color: var(--color-white); }
+.btn-primary:hover { background: var(--color-primary-dark); }
+.btn-outline {
+  background: var(--color-white);
+  color: var(--color-navy);
+  border-color: var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 8px 16px;
+  font-size: .875rem;
+}
+.btn-outline:hover { border-color: var(--color-navy); }
+.btn-outline.is-active { background: var(--color-navy); color: var(--color-white); border-color: var(--color-navy); }
+.btn-light { background: var(--color-white); color: var(--color-navy); }
+.btn-ghost-light { background: transparent; color: var(--color-white); border-color: rgba(255,255,255,.5); }
+.btn-ghost-light:hover { border-color: var(--color-white); }
+.btn-danger { background: var(--color-white); color: var(--color-accent); border-color: #f5c2c2; padding: 6px 12px; font-size: .85rem; }
+.btn-danger:hover { background: var(--color-accent-soft); }
+
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.badge-blue { background: #e8edf8; color: var(--color-primary); }
+
+.section { padding: var(--space-7) 0; }
+.section.pt-0 { padding-top: 0; }
+.section-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-4); margin-bottom: var(--space-5); }
+.section-head h2 { margin: 0; }
+.link-more { font-weight: 600; font-size: .95rem; }
+
+.page-banner { background: var(--color-surface); padding: var(--space-7) 0 var(--space-6); }
+.page-banner p { color: var(--color-muted); margin: 0; }
+
+/* 4. Retícula de tarjetas y estados -------------------------------------- */
+.cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-5); }
+.results-info { font-size: .85rem; color: var(--color-muted); margin-bottom: var(--space-4); }
+.empty-state {
+  text-align: center;
+  padding: var(--space-8) var(--space-4);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-muted);
+}
+.empty-state h3 { margin-bottom: var(--space-2); }
+.alert-error { background: var(--color-accent-soft); color: #991b1b; padding: var(--space-4); border-radius: var(--radius-sm); margin-bottom: var(--space-4); }
+
+/* 5. Formularios (contacto y administrar) -------------------------------- */
+.form-group { margin-bottom: var(--space-4); }
+.form-group label { display: block; font-size: .9rem; font-weight: 500; color: var(--color-navy); margin-bottom: 6px; }
+.form-control {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font: .95rem var(--font);
+  color: var(--color-text);
+  background: var(--color-white);
+  transition: border-color .2s, box-shadow .2s;
+}
+.form-control:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(31,58,143,.15); }
+textarea.form-control { min-height: 120px; resize: vertical; }
+.form-hint { display: block; font-size: .8rem; color: var(--color-muted); margin-top: 6px; }
+.form-group.has-error .form-control { border-color: var(--color-accent); }
+.form-group.has-error .form-hint { color: var(--color-accent); }
+.form-group.is-valid .form-control { border-color: #86c9a0; }
+.char-counter { float: right; }
+.form-success {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+  border-radius: var(--radius-sm);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  animation: slide-in .3s ease-out;
+}
+.form-success strong { display: block; }
+@keyframes slide-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+/* 6. Diseño adaptable ---------------------------------------------------- */
+@media (max-width: 860px) {
+  .cards-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .container { padding: 0 var(--space-4); }
+  .cards-grid { grid-template-columns: 1fr; }
+  .section-head { flex-direction: column; }
+}

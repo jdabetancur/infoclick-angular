@@ -1,0 +1,31 @@
+<section class="page-banner">
+  <div class="container">
+    <h1>Mis favoritos</h1>
+    <p>Las noticias que guardaste se conservan en este navegador (localStorage).</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container" *ngIf="favorites$ | async as favorites">
+    <ng-container *ngIf="favorites.length; else empty">
+      <div class="section-head">
+        <p class="results-info">
+          Tienes {{ favorites.length }} {{ favorites.length === 1 ? 'noticia guardada' : 'noticias guardadas' }}.
+        </p>
+        <button type="button" class="btn btn-danger" (click)="clearAll()">Vaciar favoritos</button>
+      </div>
+      <div class="cards-grid">
+        <app-news-card *ngFor="let news of favorites" [news]="news"></app-news-card>
+      </div>
+    </ng-container>
+
+    <!-- ng-template: bloque alternativo que *ngIf muestra cuando no hay favoritos -->
+    <ng-template #empty>
+      <div class="empty-state">
+        <h3>Aún no tienes favoritos</h3>
+        <p>Toca la estrella ☆ en cualquier noticia para guardarla aquí.</p>
+        <a class="btn btn-primary" routerLink="/noticias">Explorar noticias</a>
+      </div>
+    </ng-template>
+  </div>
+</section>

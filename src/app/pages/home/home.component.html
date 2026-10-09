@@ -1,0 +1,99 @@
+<!-- Carrusel: se pausa con el mouse encima (event binding mouseenter/mouseleave) -->
+<section class="hero" aria-roledescription="carrusel" aria-label="Noticias destacadas"
+         (mouseenter)="stopAutoplay()" (mouseleave)="startAutoplay()">
+  <div class="container">
+
+    <!-- Mientras carga el JSON se muestra la bienvenida estática -->
+    <div class="hero-slide" *ngIf="loading || error">
+      <div>
+        <span class="badge">Bienvenido</span>
+        <h1>Las noticias que importan, explicadas con claridad</h1>
+        <p>Cobertura verificada de actualidad, tecnología, economía y deportes — actualizada minuto a minuto.</p>
+        <a class="btn btn-primary" routerLink="/noticias">Ver últimas noticias</a>
+      </div>
+      <div class="hero-media"></div>
+    </div>
+
+    <!-- *ngFor recorre las destacadas; *ngIf deja en el DOM solo la diapositiva actual -->
+    <ng-container *ngFor="let news of highlights; let i = index">
+      <div class="hero-slide" *ngIf="i === current">
+        <div>
+          <span class="badge">Destacado · {{ categoryName(news.categoria) }}</span>
+          <h1>{{ news.titulo }}</h1>
+          <p>{{ news.resumen }}</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" [routerLink]="['/noticias', news.id]">Leer noticia</a>
+            <a class="btn btn-outline" routerLink="/noticias">Ver últimas noticias</a>
+          </div>
+        </div>
+        <a class="hero-media" [routerLink]="['/noticias', news.id]" tabindex="-1" aria-hidden="true">
+          <img [src]="news.imagen" alt="">
+        </a>
+      </div>
+    </ng-container>
+
+    <div class="slider-dots" role="tablist" aria-label="Seleccionar noticia destacada" *ngIf="highlights.length > 1">
+      <button type="button" class="slider-dot" role="tab"
+              *ngFor="let news of highlights; let i = index"
+              [class.is-active]="i === current"
+              [attr.aria-selected]="i === current"
+              [attr.aria-label]="'Ir a la noticia ' + (i + 1)"
+              (click)="goTo(i)"></button>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <h2>Noticias destacadas</h2>
+      <a class="link-more" routerLink="/noticias">Ver todas →</a>
+    </div>
+    <div class="alert-error" *ngIf="error">
+      <strong>No se pudieron cargar las noticias.</strong> Intenta recargar la página.
+    </div>
+    <div class="cards-grid">
+      <app-news-card *ngFor="let news of latest" [news]="news"></app-news-card>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="por-que">
+  <div class="container">
+    <div class="section-head"><h2 id="por-que">¿Por qué leer InfoClick?</h2></div>
+    <div class="info-grid">
+      <article class="info-item" *ngFor="let r of reasons">
+        <div class="info-icon" aria-hidden="true">{{ r.icon }}</div>
+        <h3>{{ r.title }}</h3>
+        <p>{{ r.text }}</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section pt-0" aria-labelledby="testimonios">
+  <div class="container">
+    <div class="section-head"><h2 id="testimonios">Lo que dicen nuestros lectores</h2></div>
+    <div class="info-grid">
+      <figure class="testimonial" *ngFor="let t of testimonials">
+        <blockquote>“{{ t.quote }}”</blockquote>
+        <figcaption><cite>{{ t.author }}</cite></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section pt-0">
+  <div class="container">
+    <div class="cta-band">
+      <div>
+        <h2>¿Tienes una historia que contar?</h2>
+        <p>Explora nuestras categorías o escríbele a la redacción de InfoClick.</p>
+      </div>
+      <div class="hero-actions">
+        <a class="btn btn-light" routerLink="/categorias">Explorar categorías</a>
+        <a class="btn btn-ghost-light" routerLink="/contacto">Contactar</a>
+      </div>
+    </div>
+  </div>
+</section>

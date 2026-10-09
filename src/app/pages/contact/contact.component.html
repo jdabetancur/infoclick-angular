@@ -1,0 +1,74 @@
+<section class="page-banner">
+  <div class="container">
+    <h1>Contáctanos</h1>
+    <p>¿Tienes una historia, corrección o comentario? Escríbenos.</p>
+  </div>
+</section>
+
+<div class="container contact-layout">
+  <section aria-labelledby="form-title">
+    <h2 id="form-title">Envíanos un mensaje</h2>
+
+    <!-- Mensaje de confirmación: solo existe en el DOM cuando sentName tiene valor -->
+    <div class="form-success" role="status" *ngIf="sentName">
+      <strong>¡Gracias, {{ sentName }}! Tu mensaje fue enviado.</strong>
+      La redacción te responderá en un plazo máximo de 48 horas hábiles.
+    </div>
+
+    <!-- (ngSubmit) es event binding; #f="ngForm" crea una referencia al formulario -->
+    <form #f="ngForm" (ngSubmit)="submit(f)" novalidate>
+      <div class="form-group" [ngClass]="{ 'has-error': show('nombre') && error('nombre'), 'is-valid': show('nombre') && !error('nombre') }">
+        <label for="nombre">Nombre completo</label>
+        <input id="nombre" name="nombre" class="form-control" type="text" placeholder="Escribe tu nombre"
+               autocomplete="name" [(ngModel)]="form.nombre" (blur)="touched.nombre = true"
+               [attr.aria-invalid]="show('nombre') && !!error('nombre')" aria-describedby="nombre-hint">
+        <small id="nombre-hint" class="form-hint">{{ show('nombre') && error('nombre') || hints.nombre }}</small>
+      </div>
+
+      <div class="form-group" [ngClass]="{ 'has-error': show('correo') && error('correo'), 'is-valid': show('correo') && !error('correo') }">
+        <label for="correo">Correo electrónico</label>
+        <input id="correo" name="correo" class="form-control" type="email" placeholder="nombre@correo.com"
+               autocomplete="email" [(ngModel)]="form.correo" (blur)="touched.correo = true"
+               [attr.aria-invalid]="show('correo') && !!error('correo')" aria-describedby="correo-hint">
+        <small id="correo-hint" class="form-hint">{{ show('correo') && error('correo') || hints.correo }}</small>
+      </div>
+
+      <div class="form-group" [ngClass]="{ 'has-error': show('asunto') && error('asunto'), 'is-valid': show('asunto') && !error('asunto') }">
+        <label for="asunto">Asunto</label>
+        <select id="asunto" name="asunto" class="form-control" [(ngModel)]="form.asunto" (blur)="touched.asunto = true"
+                [attr.aria-invalid]="show('asunto') && !!error('asunto')" aria-describedby="asunto-hint">
+          <option value="">¿Sobre qué quieres escribirnos?</option>
+          <option *ngFor="let s of subjects" [value]="s.value">{{ s.label }}</option>
+        </select>
+        <small id="asunto-hint" class="form-hint">{{ show('asunto') && error('asunto') || hints.asunto }}</small>
+      </div>
+
+      <div class="form-group" [ngClass]="{ 'has-error': show('mensaje') && error('mensaje'), 'is-valid': show('mensaje') && !error('mensaje') }">
+        <label for="mensaje">Mensaje</label>
+        <textarea id="mensaje" name="mensaje" class="form-control" [placeholder]="messagePlaceholder"
+                  [(ngModel)]="form.mensaje" (blur)="touched.mensaje = true"
+                  [attr.aria-invalid]="show('mensaje') && !!error('mensaje')" aria-describedby="mensaje-hint"></textarea>
+        <small class="form-hint char-counter" aria-hidden="true">{{ form.mensaje.trim().length }}/{{ MIN_MESSAGE }}</small>
+        <small id="mensaje-hint" class="form-hint">{{ show('mensaje') && error('mensaje') || hints.mensaje }}</small>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+    </form>
+  </section>
+
+  <aside aria-label="Información de contacto">
+    <div class="map-box">
+      <iframe title="Mapa de ubicación de InfoClick en Bogotá" loading="lazy"
+              src="https://www.openstreetmap.org/export/embed.html?bbox=-74.0775%2C4.6300%2C-74.0625%2C4.6410&amp;layer=mapnik&amp;marker=4.6355%2C-74.0700"></iframe>
+    </div>
+    <div class="contact-card">
+      <h3>Información de contacto</h3>
+      <dl>
+        <dt>Correo</dt><dd><a href="mailto:redaccion@infoclick.com">redaccion&#64;infoclick.com</a></dd>
+        <dt>Teléfono</dt><dd>+57 601 555 0199</dd>
+        <dt>Dirección</dt><dd>Cra 7 # 40-15, Bogotá, Colombia</dd>
+        <dt>Horario</dt><dd>Lunes a viernes · 8:00 a.m. – 6:00 p.m.</dd>
+      </dl>
+    </div>
+  </aside>
+</div>

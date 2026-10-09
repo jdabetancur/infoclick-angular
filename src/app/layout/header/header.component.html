@@ -1,0 +1,28 @@
+<header class="site-header">
+  <div class="container">
+    <a class="logo" routerLink="/">InfoClick<span>.</span></a>
+
+    <!-- [class.is-open] es un property binding: agrega la clase si menuOpen es true -->
+    <nav class="main-nav" [class.is-open]="menuOpen" aria-label="Navegación principal">
+      <ul>
+        <li *ngFor="let link of links">
+          <a [routerLink]="link.path"
+             routerLinkActive="is-active"
+             [routerLinkActiveOptions]="{ exact: link.exact }"
+             ariaCurrentWhenActive="page">{{ link.label }}</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <!-- El círculo rojo del mockup da acceso a Favoritos y muestra el contador -->
+      <a class="fav-indicator" routerLink="/favoritos" aria-label="Ver mis favoritos" title="Mis favoritos">
+        ★
+        <span class="fav-count" *ngIf="(favCount$ | async) as total">{{ total }}</span>
+      </a>
+      <!-- (click) es un event binding: ejecuta toggleMenu() al hacer clic -->
+      <button type="button" class="nav-toggle" (click)="toggleMenu()"
+              [attr.aria-expanded]="menuOpen" aria-label="Abrir menú">☰</button>
+    </div>
+  </div>
+</header>

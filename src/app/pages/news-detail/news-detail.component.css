@@ -1,0 +1,12 @@
+.article { max-width: 760px; margin: 0 auto; padding: var(--space-5) 0; }
+.breadcrumb { font-size: .85rem; color: var(--color-muted); margin-bottom: var(--space-4); }
+.breadcrumb ol { display: flex; flex-wrap: wrap; gap: var(--space-2); list-style: none; margin: 0; padding: 0; }
+.breadcrumb li + li::before { content: "/"; margin-right: var(--space-2); color: #9ca3af; }
+.breadcrumb a { color: var(--color-muted); }
+.article h1 { font-size: clamp(1.8rem, 3.5vw, 2.4rem); margin: var(--space-3) 0 var(--space-4); }
+.article-meta { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2); font-size: .85rem; color: var(--color-text); margin-bottom: var(--space-5); }
+.avatar { width: 36px; height: 36px; border-radius: 50%; background: #d1d5db; display: grid; place-items: center; font-weight: 700; color: var(--color-navy); font-size: .8rem; }
+.article-figure { margin: 0 0 var(--space-5); border-radius: var(--radius-md); overflow: hidden; }
+.article-figure img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.article-body p { font-size: 1.02rem; line-height: 1.75; }
+.article-actions { display: flex; gap: var(--space-3); margin-top: var(--space-5); flex-wrap: wrap; }

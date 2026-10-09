@@ -1,0 +1,78 @@
+/* Estilos encapsulados: solo afectan al encabezado (ViewEncapsulation de Angular) */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255,255,255,.96);
+  border-bottom: 1px solid var(--color-border);
+  backdrop-filter: blur(6px);
+}
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+}
+
+.main-nav ul { display: flex; gap: var(--space-6); list-style: none; margin: 0; padding: 0; }
+.main-nav a { color: var(--color-text); font-size: .95rem; font-weight: 500; }
+.main-nav a:hover { color: var(--color-primary); text-decoration: none; }
+.main-nav a.is-active { color: var(--color-primary); font-weight: 600; }
+
+.header-actions { display: flex; align-items: center; gap: var(--space-3); }
+
+.fav-indicator {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: var(--color-white);
+  font-size: 1rem;
+}
+.fav-indicator:hover { text-decoration: none; background: #b91c1c; }
+.fav-count {
+  position: absolute;
+  top: -6px; right: -8px;
+  min-width: 20px; height: 20px;
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  background: var(--color-navy);
+  color: var(--color-white);
+  font-size: .7rem;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: center;
+}
+
+.nav-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  width: 40px; height: 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--color-navy);
+}
+
+@media (max-width: 860px) {
+  .nav-toggle { display: grid; place-items: center; }
+  .main-nav {
+    display: none;
+    position: absolute;
+    top: 72px; left: 0; right: 0;
+    background: var(--color-white);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+  }
+  .main-nav.is-open { display: block; animation: slide-down .2s ease-out; }
+  .main-nav ul { flex-direction: column; gap: 0; padding: var(--space-2) var(--space-5); }
+  .main-nav a { display: block; padding: var(--space-3) 0; }
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: none; }
+}

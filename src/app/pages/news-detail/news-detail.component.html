@@ -1,0 +1,60 @@
+<div class="container">
+  <p class="results-info article" *ngIf="loading">Cargando noticia…</p>
+
+  <!-- Si la noticia no existe (o fue eliminada) se muestra un estado vacío -->
+  <div class="article" *ngIf="!loading && !news">
+    <div class="empty-state">
+      <h3>No encontramos esta noticia</h3>
+      <p>Es posible que haya sido eliminada o que el enlace sea incorrecto.</p>
+      <a class="btn btn-primary" routerLink="/noticias">Ver todas las noticias</a>
+    </div>
+  </div>
+
+  <article class="article" *ngIf="news as n">
+    <nav class="breadcrumb" aria-label="Ruta de navegación">
+      <ol>
+        <li><a routerLink="/">Inicio</a></li>
+        <li><a routerLink="/noticias" [queryParams]="{ cat: n.categoria }">{{ categoryName(n.categoria) }}</a></li>
+        <li aria-current="page">Detalle de la noticia</li>
+      </ol>
+    </nav>
+
+    <span class="badge badge-blue">{{ categoryName(n.categoria) }}</span>
+    <h1>{{ n.titulo }}</h1>
+
+    <div class="article-meta">
+      <span class="avatar" aria-hidden="true">{{ initials }}</span>
+      <span>Por {{ n.autor }}</span> ·
+      <!-- Pipe date de Angular con la configuración regional es-CO -->
+      <time [attr.datetime]="n.fecha">{{ n.fecha | date: 'longDate' }}</time> ·
+      <span>{{ n.lecturaMin }} min de lectura</span>
+      <span class="badge" *ngIf="n.creadaPorUsuario">Creada por ti</span>
+    </div>
+
+    <figure class="article-figure">
+      <img [src]="n.imagen" [alt]="'Imagen de la noticia: ' + n.titulo">
+    </figure>
+
+    <div class="article-body">
+      <p *ngFor="let paragraph of n.contenido">{{ paragraph }}</p>
+    </div>
+
+    <div class="article-actions">
+      <button type="button" class="btn btn-outline" [class.is-active]="isFavorite"
+              [attr.aria-pressed]="isFavorite" (click)="toggleFavorite()">
+        {{ isFavorite ? '★ Guardado en favoritos' : '☆ Guardar en favoritos' }}
+      </button>
+      <button type="button" class="btn btn-outline" (click)="share()">↗ Compartir</button>
+      <a class="btn btn-outline" routerLink="/contacto" [queryParams]="{ asunto: 'noticia', ref: n.id }">✉ Contactar a la redacción</a>
+    </div>
+  </article>
+</div>
+
+<section class="section" *ngIf="news && related.length">
+  <div class="container">
+    <div class="section-head"><h2>Te puede interesar</h2></div>
+    <div class="cards-grid">
+      <app-news-card *ngFor="let r of related" [news]="r"></app-news-card>
+    </div>
+  </div>
+</section>

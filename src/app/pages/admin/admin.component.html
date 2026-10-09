@@ -1,0 +1,129 @@
+<section class="page-banner">
+  <div class="container">
+    <h1>Administrar noticias</h1>
+    <p>Crea nuevas noticias o elimina las existentes. Los cambios se guardan en este navegador (localStorage).</p>
+  </div>
+</section>
+
+<div class="container admin-layout">
+  <!-- ============================ CREAR ============================ -->
+  <section class="panel" aria-labelledby="crear-title">
+    <h2 id="crear-title">Nueva noticia</h2>
+
+    <form #f="ngForm" (ngSubmit)="create(f)" novalidate>
+      <div class="form-group" [ngClass]="{ 'has-error': show('titulo') && error('titulo') }">
+        <label for="titulo">Título</label>
+        <input id="titulo" name="titulo" class="form-control" type="text" maxlength="120"
+               placeholder="Ej.: Bogotá estrena nueva línea de buses eléctricos"
+               [(ngModel)]="form.titulo" (blur)="touched.titulo = true">
+        <small class="form-hint">{{ show('titulo') && error('titulo') || 'Mínimo 10 caracteres.' }}</small>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group" [ngClass]="{ 'has-error': show('categoria') && error('categoria') }">
+          <label for="categoria">Categoría</label>
+          <select id="categoria" name="categoria" class="form-control" [(ngModel)]="form.categoria" (blur)="touched.categoria = true">
+            <option value="">Selecciona…</option>
+            <option *ngFor="let c of categories" [value]="c.key">{{ c.name }}</option>
+          </select>
+          <small class="form-hint">{{ show('categoria') && error('categoria') || 'Obligatoria.' }}</small>
+        </div>
+        <div class="form-group" [ngClass]="{ 'has-error': show('lecturaMin') && error('lecturaMin') }">
+          <label for="lecturaMin">Minutos de lectura</label>
+          <input id="lecturaMin" name="lecturaMin" class="form-control" type="number" min="1" max="60"
+                 [(ngModel)]="form.lecturaMin" (blur)="touched.lecturaMin = true">
+          <small class="form-hint">{{ show('lecturaMin') && error('lecturaMin') || 'Entre 1 y 60.' }}</small>
+        </div>
+      </div>
+
+      <div class="form-group" [ngClass]="{ 'has-error': show('autor') && error('autor') }">
+        <label for="autor">Autor</label>
+        <input id="autor" name="autor" class="form-control" type="text" [(ngModel)]="form.autor" (blur)="touched.autor = true">
+        <small class="form-hint">{{ show('autor') && error('autor') || 'Nombre de quien firma la noticia.' }}</small>
+      </div>
+
+      <div class="form-group" [ngClass]="{ 'has-error': show('resumen') && error('resumen') }">
+        <label for="resumen">Resumen</label>
+        <textarea id="resumen" name="resumen" class="form-control short" placeholder="Una o dos frases que aparecerán en la tarjeta."
+                  [(ngModel)]="form.resumen" (blur)="touched.resumen = true"></textarea>
+        <small class="form-hint char-counter">{{ form.resumen.trim().length }}/220</small>
+        <small class="form-hint">{{ show('resumen') && error('resumen') || 'Entre 20 y 220 caracteres.' }}</small>
+      </div>
+
+      <div class="form-group" [ngClass]="{ 'has-error': show('contenido') && error('contenido') }">
+        <label for="contenido">Contenido completo</label>
+        <textarea id="contenido" name="contenido" class="form-control" placeholder="Escribe el texto de la noticia. Cada salto de línea crea un párrafo nuevo."
+                  [(ngModel)]="form.contenido" (blur)="touched.contenido = true"></textarea>
+        <small class="form-hint">{{ show('contenido') && error('contenido') || 'Mínimo 50 caracteres. Cada línea es un párrafo.' }}</small>
+      </div>
+
+      <div class="form-group" [ngClass]="{ 'has-error': show('imagen') && error('imagen') }">
+        <label for="imagen">URL de la imagen (opcional)</label>
+        <input id="imagen" name="imagen" class="form-control" type="url" placeholder="https://…"
+               [(ngModel)]="form.imagen" (blur)="touched.imagen = true">
+        <small class="form-hint">{{ show('imagen') && error('imagen') || 'Si la dejas vacía se usa la ilustración de la categoría.' }}</small>
+      </div>
+
+      <label class="check">
+        <input type="checkbox" name="destacado" [(ngModel)]="form.destacado">
+        Mostrar en el carrusel de destacadas del inicio
+      </label>
+
+      <!-- Vista previa en vivo gracias al data binding -->
+      <div class="preview" *ngIf="form.titulo || previewImage">
+        <p class="preview-label">Vista previa</p>
+        <div class="preview-card">
+          <img *ngIf="previewImage" [src]="previewImage" alt="">
+          <div>
+            <span class="badge" *ngIf="form.categoria">{{ categoryName(form.categoria) }}</span>
+            <h3>{{ form.titulo || 'Título de la noticia' }}</h3>
+            <p>{{ form.resumen || 'Resumen de la noticia…' }}</p>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Publicar noticia</button>
+    </form>
+  </section>
+
+  <!-- ====================== LEER + ELIMINAR ======================= -->
+  <section class="panel" aria-labelledby="lista-title">
+    <div class="list-head">
+      <h2 id="lista-title">Noticias publicadas</h2>
+      <div class="stats">
+        <span class="stat">{{ news.length }} en total</span>
+        <span class="stat stat-blue" *ngIf="createdCount">{{ createdCount }} creadas por ti</span>
+        <span class="stat stat-red" *ngIf="deletedCount">{{ deletedCount }} originales eliminadas</span>
+      </div>
+    </div>
+
+    <div class="list-tools">
+      <label class="visually-hidden" for="admin-search">Buscar en la tabla</label>
+      <input id="admin-search" class="search-input" type="search" placeholder="Buscar por título, id o categoría…" [(ngModel)]="filter">
+      <button type="button" class="btn btn-outline" *ngIf="deletedCount" (click)="restore()">↺ Restaurar originales</button>
+    </div>
+
+    <ul class="admin-list">
+      <li *ngFor="let n of filtered; trackBy: trackById" [class.is-new]="n.creadaPorUsuario">
+        <img [src]="n.imagen" alt="">
+        <div class="admin-info">
+          <p class="admin-title">#{{ n.id }} · {{ n.titulo }}</p>
+          <p class="admin-meta">
+            {{ categoryName(n.categoria) }} · {{ n.fecha | date: 'mediumDate' }}
+            <span *ngIf="n.destacado"> · ★ Destacada</span>
+            <span *ngIf="n.creadaPorUsuario" class="tag-new"> · Nueva</span>
+          </p>
+        </div>
+        <div class="admin-actions">
+          <button type="button" class="btn btn-outline btn-sm" (click)="view(n)">Ver</button>
+          <button type="button" class="btn btn-danger" (click)="remove(n)" [attr.aria-label]="'Eliminar ' + n.titulo">Eliminar</button>
+        </div>
+      </li>
+    </ul>
+
+    <div class="empty-state" *ngIf="!filtered.length">
+      <h3>Sin resultados</h3>
+      <p>No hay noticias que coincidan con la búsqueda.</p>
+    </div>
+  </section>
+</div>

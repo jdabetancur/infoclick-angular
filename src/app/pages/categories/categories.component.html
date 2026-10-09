@@ -1,0 +1,23 @@
+<section class="page-banner">
+  <div class="container">
+    <h1>Categorías</h1>
+    <p>Elige un tema para ver solo las noticias que te interesan.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="category-grid">
+      <a class="category-card" *ngFor="let cat of categories$ | async; let i = index"
+         routerLink="/noticias" [queryParams]="{ cat: cat.key }"
+         [ngStyle]="{ 'animation-delay': (i * 120) + 'ms' }">
+        <img [src]="'img/categoria-' + cat.key + '.svg'" alt="">
+        <div>
+          <h3>{{ cat.name }}</h3>
+          <p>{{ cat.description }}</p>
+          <p><strong>{{ cat.total }}</strong> {{ cat.total === 1 ? 'noticia' : 'noticias' }}</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>

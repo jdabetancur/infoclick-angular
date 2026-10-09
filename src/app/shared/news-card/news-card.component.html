@@ -1,0 +1,27 @@
+<article class="news-card">
+  <div class="card-media">
+    <a [routerLink]="['/noticias', news.id]" tabindex="-1" aria-hidden="true">
+      <!-- [src] es property binding: la ruta de la imagen sale del objeto noticia -->
+      <img [src]="news.imagen" alt="" loading="lazy">
+    </a>
+    <div class="card-actions">
+      <button type="button" class="icon-btn"
+              [ngClass]="{ 'is-fav': isFavorite }"
+              [attr.aria-pressed]="isFavorite"
+              [attr.aria-label]="(isFavorite ? 'Quitar de' : 'Agregar a') + ' favoritos'"
+              [title]="(isFavorite ? 'Quitar de' : 'Agregar a') + ' favoritos'"
+              (click)="toggleFavorite()">{{ isFavorite ? '★' : '☆' }}</button>
+      <button type="button" class="icon-btn" aria-label="Compartir noticia" title="Compartir"
+              (click)="share()">↗</button>
+    </div>
+  </div>
+  <div class="card-body">
+    <span class="badge">{{ category }}</span>
+    <h3 class="card-title"><a [routerLink]="['/noticias', news.id]">{{ news.titulo }}</a></h3>
+    <p class="card-summary">{{ news.resumen }}</p>
+    <div class="card-footer">
+      <p class="card-meta">{{ news.autor }} · {{ news.fecha | timeAgo }}</p>
+      <a class="card-more" [routerLink]="['/noticias', news.id]">Ver más →</a>
+    </div>
+  </div>
+</article>
